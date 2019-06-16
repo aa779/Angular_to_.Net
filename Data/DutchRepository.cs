@@ -20,7 +20,10 @@ namespace DutchTreat.Data
 
         public IEnumerable<Order> GetAllOrders()
         {
-            return _ctx.Orders.Include(o => o.Items).ToList();
+            return _ctx.Orders
+                       .Include(o => o.Items)
+                       .ThenInclude(i => i.Product)
+                       .ToList();
         }
 
         public IEnumerable<Product> GetAllProducts()
@@ -40,6 +43,16 @@ namespace DutchTreat.Data
                 return null;
             }
         }
+
+        public Order GetOrderById(int id)
+        {
+            return _ctx.Orders
+                       .Include(o => o.Items)
+                       .ThenInclude(i => i.Product)
+                       .Where(o => o.Id == id)
+                       .FirstOrDefault();
+        }
+
         public IEnumerable<Product> GetProductsByCategory(string category)
         {
             return _ctx.Products
