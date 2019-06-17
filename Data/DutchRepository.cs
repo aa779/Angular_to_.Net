@@ -18,12 +18,25 @@ namespace DutchTreat.Data
             _logger = logger;
         }
 
-        public IEnumerable<Order> GetAllOrders()
+        public void AddEntity(object model)
         {
-            return _ctx.Orders
-                       .Include(o => o.Items)
-                       .ThenInclude(i => i.Product)
-                       .ToList();
+            _ctx.Add(model);
+        }
+
+        public IEnumerable<Order> GetAllOrders(bool includeItems)
+        {
+            if (includeItems)
+            {
+                return _ctx.Orders
+                           .Include(o => o.Items)
+                           .ThenInclude(i => i.Product)
+                           .ToList();
+            }
+            else
+            {
+                return _ctx.Orders
+                           .ToList();
+            }
         }
 
         public IEnumerable<Product> GetAllProducts()
@@ -62,12 +75,6 @@ namespace DutchTreat.Data
         public bool SaveAll()
         {
             return _ctx.SaveChanges() > 0;
-        }
-
-        public bool SaveChanges()
-        {
-//            throw new System.NotImplementedException();
-            return false;
         }
     }
 }
