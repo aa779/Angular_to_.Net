@@ -16,6 +16,7 @@ namespace DutchTreat.Controllers
             _mailService = mailService;
             _repository = repository;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -50,7 +51,9 @@ namespace DutchTreat.Controllers
 
             return View();
         }
+
         [Authorize]
+        [HttpGet("shop")]
         public IActionResult Shop()
         {
             var results = _repository.GetAllProducts();

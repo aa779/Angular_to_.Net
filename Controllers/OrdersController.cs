@@ -41,6 +41,7 @@ namespace DutchTreat.Controllers
                 return BadRequest("Failed to get orders");
             }
         }
+
         [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {

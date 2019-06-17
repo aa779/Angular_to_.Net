@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using DutchTreat.Data;
+using DutchTreat.Data.Entities;
 using DutchTreat.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +27,10 @@ namespace DutchTreat
         [System.Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<StoreUser, IdentityRole>(cfg => {
+                cfg.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<DutchContext>();
+
             services.AddDbContext<DutchContext>(cfg => {
                 cfg.UseSqlServer(_config.GetConnectionString("DutchConnectionString"));
             });
@@ -57,6 +63,8 @@ namespace DutchTreat
             app.UseStaticFiles();
 
             app.UseNodeModules(env);
+
+            app.UseAuthentication();
 
             app.UseMvc(cfg =>
             {
